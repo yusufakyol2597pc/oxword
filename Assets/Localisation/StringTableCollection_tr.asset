@@ -1,0 +1,137 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: StringTableCollection_tr
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: tr
+  m_SharedData: {fileID: 11400000, guid: ec8eefee187c44139a7078723f0d1c64, type: 2}
+  m_Metadata:
+    m_Items:
+    - rid: 1421313538612002881
+  m_TableData:
+  - m_Id: 27102535680
+    m_Localized: Oyna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2229091164160
+    m_Localized: "Y\xFCkleniyor..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4093748699136
+    m_Localized: "Oyun se\xE7"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6593323196416
+    m_Localized: "Z\u0131t Anlaml\u0131lar"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6680094957568
+    m_Localized: "E\u015F Anlaml\u0131lar"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6842800398336
+    m_Localized: Tekil Kelimeler
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135268735639552
+    m_Localized: Sesler
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135401946734592
+    m_Localized: "M\xFCzikler"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135466476101632
+    m_Localized: Bildirimler
+    m_Metadata:
+      m_Items: []
+  - m_Id: 138673076035584
+    m_Localized: Ayarlar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 139634284683264
+    m_Localized: "Oyun ses ve titre\u015Fim ayarlar\u0131n\u0131 yapabilirsin"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 139934391328768
+    m_Localized: "Titre\u015Fim"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 141285573779456
+    m_Localized: "A\xE7\u0131k"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 141323234435072
+    m_Localized: "Kapal\u0131"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 142497341759488
+    m_Localized: "Oyun m\xFCzik ayarlar\u0131n\u0131 yapabilirsin"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 142632960385024
+    m_Localized: Ses Efektleri
+    m_Metadata:
+      m_Items: []
+  - m_Id: 144100589297664
+    m_Localized: "Bildirim ayarlar\u0131n\u0131 de\u011Fi\u015Ftirebilirsin"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 144274069905408
+    m_Localized: "\u0130pucu"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 145043665969152
+    m_Localized: Oyna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 145090742837248
+    m_Localized: "Level D\xFCnyas\u0131"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 145175912374272
+    m_Localized: "Reklamlar\u0131 Kald\u0131r"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 145260058501120
+    m_Localized: Sonraki Level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 145336059289600
+    m_Localized: Tekrar Oyna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 146621345030144
+    m_Localized: "S\xFCre Bitti!<br> Tekrar deneyiniz."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 148238840619008
+    m_Localized: "Tebrikler!<br> Toplam {point} puan kazand\u0131n\u0131z."
+    m_Metadata:
+      m_Items:
+      - rid: 1421313538612002881
+  - m_Id: 152200855674880
+    m_Localized: Dil
+    m_Metadata:
+      m_Items: []
+  - m_Id: 153160764088320
+    m_Localized: "Aray\xFCz dilini se\xE7ebilirsin"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 1421313538612002881
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 00e06f8bd2860000

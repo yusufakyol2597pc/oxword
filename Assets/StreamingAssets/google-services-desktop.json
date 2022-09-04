@@ -1,0 +1,36 @@
+{
+  "project_info": {
+    "project_number": "897800453923",
+    "project_id": "oxword-c7475",
+    "storage_bucket": "oxword-c7475.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:897800453923:ios:cd8a20dadc0e9159fc5696",
+        "android_client_info": {
+          "package_name": "com.cyt.owxord"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "897800453923-493cmehqjmfo1o017vqtq3ruddg01vg4.apps.googleusercontent.com"
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDruZnQgk9QeVpJaD1mamsczfxcMTdbZE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 0
+        },
+        "appinvite_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

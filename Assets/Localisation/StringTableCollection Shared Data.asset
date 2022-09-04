@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: StringTableCollection Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: StringTableCollection
+  m_TableCollectionNameGuidString: ec8eefee187c44139a7078723f0d1c64
+  m_Entries:
+  - m_Id: 27102535680
+    m_Key: play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2229091164160
+    m_Key: loading
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4093748699136
+    m_Key: choose_game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6593323196416
+    m_Key: opposite_game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6680094957568
+    m_Key: synonym_game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6842800398336
+    m_Key: single_game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135268735639552
+    m_Key: sounds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135401946734592
+    m_Key: music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135466476101632
+    m_Key: notification
+    m_Metadata:
+      m_Items: []
+  - m_Id: 138673076035584
+    m_Key: settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 139634284683264
+    m_Key: adjust_game_sound
+    m_Metadata:
+      m_Items: []
+  - m_Id: 139934391328768
+    m_Key: vibration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 141285573779456
+    m_Key: on
+    m_Metadata:
+      m_Items: []
+  - m_Id: 141323234435072
+    m_Key: off
+    m_Metadata:
+      m_Items: []
+  - m_Id: 142497341759488
+    m_Key: adjust_game_music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 142632960385024
+    m_Key: soundFx
+    m_Metadata:
+      m_Items: []
+  - m_Id: 144100589297664
+    m_Key: adjust_notifications
+    m_Metadata:
+      m_Items: []
+  - m_Id: 144274069905408
+    m_Key: hint
+    m_Metadata:
+      m_Items: []
+  - m_Id: 145043665969152
+    m_Key: pla
+    m_Metadata:
+      m_Items: []
+  - m_Id: 145090742837248
+    m_Key: level_world
+    m_Metadata:
+      m_Items: []
+  - m_Id: 145175912374272
+    m_Key: remove_ads
+    m_Metadata:
+      m_Items: []
+  - m_Id: 145260058501120
+    m_Key: next_level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 145336059289600
+    m_Key: play_again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 146621345030144
+    m_Key: fail_text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 148238840619008
+    m_Key: success_text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 152200855674880
+    m_Key: language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 153160764088320
+    m_Key: adjust_language
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 1421313538612002840
+  references:
+    version: 2
+    RefIds:
+    - rid: 1421313538612002840
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1659783818842

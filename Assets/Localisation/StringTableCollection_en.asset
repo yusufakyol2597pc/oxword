@@ -1,0 +1,137 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: StringTableCollection_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: ec8eefee187c44139a7078723f0d1c64, type: 2}
+  m_Metadata:
+    m_Items:
+    - rid: 1421313538612002883
+  m_TableData:
+  - m_Id: 27102535680
+    m_Localized: Play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2229091164160
+    m_Localized: Loading...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4093748699136
+    m_Localized: Choose your game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6593323196416
+    m_Localized: Opposite Words
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6680094957568
+    m_Localized: Synonym Words
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6842800398336
+    m_Localized: Single Words
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135268735639552
+    m_Localized: Sound
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135401946734592
+    m_Localized: Music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 135466476101632
+    m_Localized: Notification
+    m_Metadata:
+      m_Items: []
+  - m_Id: 138673076035584
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 139634284683264
+    m_Localized: You can adjust the game sound
+    m_Metadata:
+      m_Items: []
+  - m_Id: 139934391328768
+    m_Localized: Vibration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 141285573779456
+    m_Localized: On
+    m_Metadata:
+      m_Items: []
+  - m_Id: 141323234435072
+    m_Localized: Off
+    m_Metadata:
+      m_Items: []
+  - m_Id: 142497341759488
+    m_Localized: You can adjust game musics
+    m_Metadata:
+      m_Items: []
+  - m_Id: 142632960385024
+    m_Localized: Sound FX
+    m_Metadata:
+      m_Items: []
+  - m_Id: 144100589297664
+    m_Localized: You can turn on the game notifications
+    m_Metadata:
+      m_Items: []
+  - m_Id: 144274069905408
+    m_Localized: Hint
+    m_Metadata:
+      m_Items: []
+  - m_Id: 145043665969152
+    m_Localized: Play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 145090742837248
+    m_Localized: Level World
+    m_Metadata:
+      m_Items: []
+  - m_Id: 145175912374272
+    m_Localized: Remove ADS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 145260058501120
+    m_Localized: Next Level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 145336059289600
+    m_Localized: Play Again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 146621345030144
+    m_Localized: No time left!<br> Try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 148238840619008
+    m_Localized: Congrats!<br> You earned {point} points in total.
+    m_Metadata:
+      m_Items:
+      - rid: 1421313538612002883
+  - m_Id: 152200855674880
+    m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 153160764088320
+    m_Localized: You can change interface language
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 1421313538612002883
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 00e06f8bd2860000
