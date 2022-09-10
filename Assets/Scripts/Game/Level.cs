@@ -37,6 +37,8 @@ public class Level : MonoBehaviour
     private int m_point = 8;
     public GameState m_gameState;
 
+    private int m_iCustomLevelCounter = 0;
+
     void Awake()
     {
         if (Instance != null)
@@ -47,7 +49,6 @@ public class Level : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-    // Start is called before the first frame update
     public void Init(GameState gameState)
     {
         m_levelWords = gameState.m_lWords;
@@ -79,10 +80,10 @@ public class Level : MonoBehaviour
         if (gameType == GameType.SingleWord)
         {
             WordController.Instance.Initialize(
-            m_levelWords[levelIndex][0],
-            Constants.BG_COLORS[index, 0],
-            m_sprWord1List[index],
-            m_sprWordBg1List[index]
+                m_levelWords[levelIndex][0],
+                Constants.BG_COLORS[index, 0],
+                m_sprWord1List[index],
+                m_sprWordBg1List[index]
             );
         }
         else
@@ -104,6 +105,8 @@ public class Level : MonoBehaviour
     {
         WordController.Instance.DisableDragging();
         AnimateGainedCoin();
+
+        m_iCustomLevelCounter++;
 
         m_isRunning = false;
         var d1 = new Dictionary<string, string> { { "point", m_point.ToString() } };
@@ -132,7 +135,16 @@ public class Level : MonoBehaviour
     public void NextLevel()
     {
         Logger.Log("NextLevel", "Clicked next level.");
+
         WordController.Instance.Cleanup();
+
+        if (m_iCustomLevelCounter >= 5)
+        {
+            m_iCustomLevelCounter = 0;
+
+            Logger.Log("NextLevel", "Start custom level.");
+        }
+
         StartLevel(m_gameState.m_gameType);
     }
 

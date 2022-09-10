@@ -17,6 +17,8 @@ public class UserState : MonoBehaviour
     [SerializeField] private GameObject m_goGameCanvas;
     [SerializeField] private TextMeshProUGUI m_coinText;
 
+    [SerializeField] CGameSingleWord m_gameSingleWord;
+
     public List<GameState> m_lGames;
     public bool m_bSounds = true;
     public bool m_bVibration = true;
@@ -35,7 +37,7 @@ public class UserState : MonoBehaviour
     void Awake()
     {
         if (Instance != null)
-            GameObject.Destroy(Instance);
+            Destroy(Instance);
         else
             Instance = this;
 
@@ -89,7 +91,7 @@ public class UserState : MonoBehaviour
         m_lGames.Add(game3);
 
         m_iCoin = 60000;
-        UserSave userSave = SaveGame();
+        UserSave userSave = SaveGame(true);
 
         await SaveToCloudSynchronous();
 
@@ -114,9 +116,12 @@ public class UserState : MonoBehaviour
         StartCoroutine(GetWords());
     }
 
-    public UserSave SaveGame()
+    public UserSave SaveGame(bool saveToCloud = false)
     {
-        SaveToCloud();
+        if (saveToCloud == true)
+        {
+            StartCoroutine(SaveToCloud());
+        }
         return SaveToFile();
     }
 
@@ -135,11 +140,16 @@ public class UserState : MonoBehaviour
         return userSave;
     }
 
-    void SaveToCloud() {
+    IEnumerator SaveToCloud()
+    {
         Logger.Log("SaveToCloud", "Save game.");
 
-        SaveData("games", m_lGames);
-        SaveData("coin", m_iCoin);
+        yield return 0;
+
+        SaveData("games", m_lGames).ContinueWith((arg) => {
+        });
+        SaveData("coin", m_iCoin).ContinueWith((arg) => {
+        });
     }
 
     async Task SaveToCloudSynchronous() {
@@ -184,7 +194,17 @@ public class UserState : MonoBehaviour
 
     void LoadLevel(GameState gameState)
     {
-        Level.Instance.Init(gameState);
+        switch (gameState.m_gameType)
+        {
+            case GameType.SingleWord:
+                m_gameSingleWord.Startup(gameState);
+                break;
+            default:
+                // code block
+                break;
+        }
+
+        //Level.Instance.Init(gameState);
     }
 
     public void OnCoinEarned(int coin)
@@ -210,7 +230,7 @@ public class UserState : MonoBehaviour
                 state.m_iLevel += 1;
             }
         }
-        SaveGame();
+        SaveGame(true);
     }
 
     public int GetCoinCount()

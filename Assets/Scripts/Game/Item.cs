@@ -44,11 +44,11 @@ public class Item : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
 
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
-        WordController.Instance.OnStartDrag();
+        WordManager.Instance.OnStartDrag();
         canvasGroup.alpha = 0.6f;
-        for(int i = 0; i < WordController.Instance.canvasGroupList.Count; i++)
+        for(int i = 0; i < WordManager.Instance.canvasGroupList.Count; i++)
         {
-            WordController.Instance.canvasGroupList[i].blocksRaycasts = false;
+            WordManager.Instance.canvasGroupList[i].blocksRaycasts = false;
             GetComponent<RectTransform>().SetAsLastSibling();
         }
     }
@@ -64,16 +64,16 @@ public class Item : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
 
     void IEndDragHandler.OnEndDrag(PointerEventData eventData)
     {
-        WordController.Instance.OnEndDrag();
+        WordManager.Instance.OnEndDrag();
         canvasGroup.alpha = 1f;
         if (m_bIslocked)
         {
             return;
         }
         canvasGroup.blocksRaycasts = true;
-        for (int i = 0; i < WordController.Instance.canvasGroupList.Count; i++)
+        for (int i = 0; i < WordManager.Instance.canvasGroupList.Count; i++)
         {
-            WordController.Instance.canvasGroupList[i].blocksRaycasts = true;
+            WordManager.Instance.canvasGroupList[i].blocksRaycasts = true;
         }
 
         ItemSlot itemSlot = m_itemSlot.GetComponent<ItemSlot>();

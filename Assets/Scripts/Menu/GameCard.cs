@@ -48,7 +48,7 @@ public class GameCard : MonoBehaviour
 
     protected virtual void OnGameCardUnlocked()
     {
-        UserState.Instance.SaveGame();
+        UserState.Instance.SaveGame(true);
         GameCardUnlocked?.Invoke();
     }
 

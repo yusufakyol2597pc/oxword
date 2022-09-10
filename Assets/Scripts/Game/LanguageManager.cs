@@ -22,12 +22,9 @@ public class LanguageManager : MonoBehaviour
     public string Translate(string key)
     {
         StringTable currentStringTable = _localizedStringTable.GetTable();
-        Debug.Log("key " + key);
         if (currentStringTable != null)
         {
             var entry = currentStringTable[key];
-
-            Debug.Log(entry.GetLocalizedString());
             return entry.GetLocalizedString();
         }
         return "Table not found!";
@@ -36,12 +33,9 @@ public class LanguageManager : MonoBehaviour
     public string Translate(string key, Dictionary<string, string> dict)
     {
         StringTable currentStringTable = _localizedStringTable.GetTable();
-        Debug.Log("key " + key);
         if (currentStringTable != null)
         {
             var entry = currentStringTable[key];
-
-            Debug.Log(entry.GetLocalizedString(dict));
             return entry.GetLocalizedString(dict);
         }
         return "Table not found!";

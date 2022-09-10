@@ -72,7 +72,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
 
         if (evaluate)
         {
-            WordController.Instance.EvaluateMove();
+            WordManager.Instance.EvaluateMove();
         }
     }
 
