@@ -128,6 +128,10 @@ MonoBehaviour:
     m_Localized: "Aray\xFCz dilini se\xE7ebilirsin"
     m_Metadata:
       m_Items: []
+  - m_Id: 13052871535972352
+    m_Localized: Puan
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

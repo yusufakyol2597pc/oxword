@@ -65,6 +65,7 @@ public class WordManager : MonoBehaviour
     }
 
     public void Initialize(
+        CGame game,
         string word1,
         string word2,
         Sprite sprWord1,
@@ -72,7 +73,9 @@ public class WordManager : MonoBehaviour
         Sprite sprWordBg1,
         Sprite sprWordBg2)
     {
+        gameObject.SetActive(true);
         m_type = WordManagerType.Double;
+        m_game = game;
 
         m_word1 = word1;
         m_word2 = word2;
@@ -94,6 +97,7 @@ public class WordManager : MonoBehaviour
         Sprite sprWord,
         Sprite sprWordBg)
     {
+        gameObject.SetActive(true);
         m_type = WordManagerType.Single;
         m_game = game;
 
@@ -293,7 +297,7 @@ public class WordManager : MonoBehaviour
 
         if (succeeded)
         {
-            Level.Instance.OnSucceed();
+            m_game.OnSucceed();
         }
         Logger.Log("EvaluateDouble", $"Compared {m_word1} with {word1} and {m_word2} with {word2}.");
     }

@@ -38,6 +38,11 @@ public class ChooseGameController : CMenu
 
         foreach (GameState game in games)
         {
+            if (game.m_gameType == GameType.CustomLevel)
+            {
+                continue;
+            }
+
             Transform cardTransform;
             if (game.m_bBlocked) {
                 cardTransform = Instantiate(m_trLockedCardTemplate, m_trCardContainer);

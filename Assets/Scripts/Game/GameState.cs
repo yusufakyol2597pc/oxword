@@ -8,7 +8,8 @@ public enum GameType
 {
     Opposite = 5000,
     Synonym = 10000,
-    SingleWord = 40000
+    SingleWord = 40000,
+    CustomLevel = 0
 }
 
 [Serializable]
@@ -41,6 +42,8 @@ public class GameState
                 return "Synonym";
             case GameType.SingleWord:
                 return "SingleWord";
+            case GameType.CustomLevel:
+                return "CustomLevel";
             default:
                 return "Unknown Game";
         }

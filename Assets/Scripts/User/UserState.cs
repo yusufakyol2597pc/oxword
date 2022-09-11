@@ -15,9 +15,11 @@ public class UserState : MonoBehaviour
 
     [SerializeField] private MenuController menuController;
     [SerializeField] private GameObject m_goGameCanvas;
-    [SerializeField] private TextMeshProUGUI m_coinText;
 
+    private CGame m_activeGame;
     [SerializeField] CGameSingleWord m_gameSingleWord;
+    [SerializeField] CGameDoubleWord m_gameDobuleWord;
+    [SerializeField] CGameCustomLevel m_customLevel;
 
     public List<GameState> m_lGames;
     public bool m_bSounds = true;
@@ -84,16 +86,22 @@ public class UserState : MonoBehaviour
         GameState game1 = new GameState("opposite_game", GameType.Opposite);
         GameState game2 = new GameState("synonym_game", GameType.Synonym);
         GameState game3 = new GameState("single_game", GameType.SingleWord);
+        GameState game4 = new GameState("custom_level", GameType.CustomLevel);
 
         m_lGames = new List<GameState>();
         m_lGames.Add(game1);
         m_lGames.Add(game2);
         m_lGames.Add(game3);
+        m_lGames.Add(game4);
 
         m_iCoin = 60000;
-        UserSave userSave = SaveGame(true);
+        SaveGame(true);
 
         await SaveToCloudSynchronous();
+
+        UserSave userSave = new UserSave();
+        userSave.m_bSounds = m_bSounds;
+        userSave.m_bVibration = m_bVibration;
 
         Initialize(userSave);
     }
@@ -110,23 +118,23 @@ public class UserState : MonoBehaviour
 
         LoadIntData("coin").ContinueWith(t => {
             m_iCoin = t.Result;
-            m_coinText.text = "" + t.Result;
         });
 
         StartCoroutine(GetWords());
     }
 
-    public UserSave SaveGame(bool saveToCloud = false)
+    public void SaveGame(bool saveToCloud = false)
     {
         if (saveToCloud == true)
         {
             StartCoroutine(SaveToCloud());
         }
-        return SaveToFile();
+        StartCoroutine(SaveToFile());
     }
 
-    UserSave SaveToFile() {
+    IEnumerator SaveToFile() {
         Logger.Log("SaveToFile", "Save game.");
+        yield return 0;
 
         UserSave userSave = new UserSave();
         userSave.m_bSounds = m_bSounds;
@@ -137,7 +145,6 @@ public class UserState : MonoBehaviour
         writer.Write(saveJson);
         writer.Flush();
         writer.Close();
-        return userSave;
     }
 
     IEnumerator SaveToCloud()
@@ -194,30 +201,47 @@ public class UserState : MonoBehaviour
 
     void LoadLevel(GameState gameState)
     {
+        m_activeGame?.End();
+
         switch (gameState.m_gameType)
         {
             case GameType.SingleWord:
                 m_gameSingleWord.Startup(gameState);
+                m_activeGame = m_gameSingleWord;
+                break;
+            case GameType.Synonym:
+            case GameType.Opposite:
+                m_gameDobuleWord.Startup(gameState);
+                m_activeGame = m_gameDobuleWord;
                 break;
             default:
-                // code block
+                Logger.Log("LoadLevel", "Game type not implemented");
                 break;
         }
+    }
 
-        //Level.Instance.Init(gameState);
+    public void LoadCustomLevel()
+    {
+        Debug.Log("start custom levellll " + m_lGames.Count);
+        foreach (GameState gameState in m_lGames)
+        {
+            if (gameState.m_gameType == GameType.CustomLevel)
+            {
+                m_customLevel.Startup(gameState);
+                break;
+            }
+        }
     }
 
     public void OnCoinEarned(int coin)
     {
         m_iCoin += coin;
-        m_coinText.text = "" + m_iCoin;
         SaveGame();
     }
 
     public void OnCoinSpent(int coin)
     {
         m_iCoin -= coin;
-        m_coinText.text = "" + m_iCoin;
         SaveGame();
     }
 

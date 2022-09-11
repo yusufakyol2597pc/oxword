@@ -4,15 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class CGameSingleWord : CGame
+public class CGameDoubleWord : CGame
 {
     [SerializeField] private TextMeshProUGUI m_resultText;
     [SerializeField] private TextMeshProUGUI m_levelText;
 
-    [SerializeField] private Sprite[] m_sprWordList;
-    [SerializeField] private Sprite[] m_sprWordBgList;
+    [SerializeField] private Sprite[] m_sprUpperLetterList;
+    [SerializeField] private Sprite[] m_sprLowerLetterList;
+    [SerializeField] private Sprite[] m_sprUpperLetterBgList;
+    [SerializeField] private Sprite[] m_sprLowerLetterBgList;
 
-    [SerializeField] private Image m_BgImage;
+    [SerializeField] private Image m_upperBgImage;
+    [SerializeField] private Image m_lowerBgImage;
 
     public override void StartGame()
     {
@@ -23,25 +26,33 @@ public class CGameSingleWord : CGame
         m_levelText.text = "Level " + m_gameState.m_iLevel;
 
         int colorIndex = levelIndex % Constants.BG_COLORS.GetLength(0);
-        string bgColor = Constants.BG_COLORS[colorIndex, 0];
-
-        int sprWordIndex = levelIndex % m_sprWordList.Length;
-        int sprWordIBgndex = levelIndex % m_sprWordBgList.Length;
-        int wordIndex = levelIndex % m_levelWords.Count;
-        string word = m_levelWords[wordIndex][0];
-
-        m_counterMaxTime = 10 * (word.Length / DURATION_CONSTANT);
+        string upperBgColor = Constants.BG_COLORS[colorIndex, 0];
+        string lowerBgColor = Constants.BG_COLORS[colorIndex, 1];
 
         Color colorBg;
-        ColorUtility.TryParseHtmlString(bgColor, out colorBg);
-        m_BgImage.color = colorBg;
+        ColorUtility.TryParseHtmlString(upperBgColor, out colorBg);
+        m_upperBgImage.color = colorBg;
+
+        ColorUtility.TryParseHtmlString(lowerBgColor, out colorBg);
+        m_lowerBgImage.color = colorBg;
+
+        int sprWordIndex = levelIndex % m_sprUpperLetterList.Length;
+        int sprWordBgIndex = levelIndex % m_sprUpperLetterBgList.Length;
+        int wordIndex = levelIndex % m_levelWords.Count;
+        string upperWord = m_levelWords[wordIndex][0];
+        string lowerWord = m_levelWords[wordIndex][1];
+
+        m_counterMaxTime = 10 * ((upperWord.Length + lowerWord.Length) / DURATION_CONSTANT);
 
         WordManager.Instance.Initialize(
                 this,
-                word,
-                m_sprWordList[sprWordIndex],
-                m_sprWordBgList[sprWordIBgndex]
-            );
+                upperWord,
+                lowerWord,
+                m_sprUpperLetterList[sprWordIndex],
+                m_sprLowerLetterList[sprWordIndex],
+                m_sprUpperLetterBgList[sprWordBgIndex],
+                m_sprLowerLetterBgList[sprWordBgIndex]
+           );
     }
 
     public override void OnSucceed()

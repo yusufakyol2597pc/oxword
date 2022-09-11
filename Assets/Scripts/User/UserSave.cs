@@ -4,6 +4,6 @@ using System;
 [Serializable]
 public class UserSave
 {
-    public bool m_bSounds;
-    public bool m_bVibration;
+    public bool m_bSounds = true;
+    public bool m_bVibration = true;
 }
