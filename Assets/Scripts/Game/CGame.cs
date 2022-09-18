@@ -138,5 +138,6 @@ public abstract class CGame : MonoBehaviour
             return;
         }
         WordManager.Instance.UseHint();
+        UserState.Instance.OnHintUsed();
     }
 }

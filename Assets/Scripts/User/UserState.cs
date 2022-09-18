@@ -254,6 +254,12 @@ public class UserState : MonoBehaviour
         SaveGame();
     }
 
+    public void OnHintUsed()
+    {
+        m_iHint--;
+        SaveGame();
+    }
+
     public void OnLevelUp(GameState gameState)
     {
         foreach (GameState state in m_lGames)
