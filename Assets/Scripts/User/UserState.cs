@@ -12,6 +12,7 @@ public class UserState : MonoBehaviour
 {
     public static UserState Instance;
     private int m_iCoin = 0;
+    private int m_iHint = 0;
 
     [SerializeField] private MenuController menuController;
     [SerializeField] private GameObject m_goGameCanvas;
@@ -95,6 +96,7 @@ public class UserState : MonoBehaviour
         m_lGames.Add(game4);
 
         m_iCoin = 60000;
+        m_iHint = 5;
         SaveGame(true);
 
         await SaveToCloudSynchronous();
@@ -118,6 +120,10 @@ public class UserState : MonoBehaviour
 
         LoadIntData("coin").ContinueWith(t => {
             m_iCoin = t.Result;
+        });
+
+        LoadIntData("hintCount").ContinueWith(t => {
+            m_iHint = t.Result;
         });
 
         StartCoroutine(GetWords());
@@ -157,6 +163,8 @@ public class UserState : MonoBehaviour
         });
         SaveData("coin", m_iCoin).ContinueWith((arg) => {
         });
+        SaveData("hintCount", m_iHint).ContinueWith((arg) => {
+        });
     }
 
     async Task SaveToCloudSynchronous() {
@@ -164,6 +172,7 @@ public class UserState : MonoBehaviour
 
         await SaveData("games", m_lGames);
         await SaveData("coin", m_iCoin);
+        await SaveData("hintCount", m_iHint);
     }
 
     public async Task SaveData<T>(string key, T value)
@@ -260,6 +269,11 @@ public class UserState : MonoBehaviour
     public int GetCoinCount()
     {
         return m_iCoin;
+    }
+
+    public int GetHintCount()
+    {
+        return m_iHint;
     }
 
     void ReadWords()

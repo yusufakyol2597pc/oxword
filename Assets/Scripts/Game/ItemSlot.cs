@@ -84,6 +84,11 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         ResetFrame();
     }
 
+    public GameObject GetItemGO()
+    {
+        return m_item;
+    }
+
     public string GetLetter()
     {
         return m_item.GetComponent<Item>().GetLetter();
@@ -97,6 +102,17 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         }
         string letter = word.ToUpper().Substring(m_letterIndex, 1);
         if (m_item != null && m_item.GetComponent<Item>().GetLetter() == letter)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public bool CheckLetter(string word, string letter)
+    {
+        string correctLetter = word.ToUpper().Substring(m_letterIndex, 1);
+        Logger.Log("CheckLetter", correctLetter + ": " + letter);
+        if (m_item != null && correctLetter == letter)
         {
             return true;
         }

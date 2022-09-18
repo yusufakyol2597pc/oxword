@@ -68,7 +68,7 @@ public abstract class CGame : MonoBehaviour
 
         WordManager.Instance.Cleanup();
 
-        if (s_iCustomLevelCounter >= 1)
+        if (s_iCustomLevelCounter >= Constants.CUSTOM_LEVEL_INTERVAL)
         {
             s_iCustomLevelCounter = 0;
             Logger.Log("NextLevel", "Start custom level.");
@@ -128,5 +128,15 @@ public abstract class CGame : MonoBehaviour
     public void End()
     {
         gameObject.SetActive(false);
+    }
+
+    public void UseHint()
+    {
+        if (UserState.Instance.GetHintCount() <= 0)
+        {
+            Logger.Log("UseHint", "Hint count is not enough!");
+            return;
+        }
+        WordManager.Instance.UseHint();
     }
 }

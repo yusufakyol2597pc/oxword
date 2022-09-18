@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using System;
 
 public enum WordManagerType
 {
@@ -14,6 +15,9 @@ public enum WordManagerType
 public class WordManager : MonoBehaviour
 {
     public static readonly float SPACE_BETWEEN_LETTERS = 16;
+    public static readonly float SPACE_UP = 5;
+    public static readonly float SPACE_DOWN = 17;
+    public static readonly float HINT_ANIM_DURATION = 0.25f;
 
     public static WordManager Instance;
 
@@ -48,18 +52,14 @@ public class WordManager : MonoBehaviour
     void Awake()
     {
         if (Instance != null)
-            GameObject.Destroy(Instance);
+            Destroy(Instance);
         else
             Instance = this;
 
         DontDestroyOnLoad(this);
-
-        //Canvas canvas = FindObjectOfType<Canvas>();
-
-        m_screenHeight = 414;
-        m_screenWidth = 900;
-        //m_screenHeight = canvas.GetComponent<RectTransform>().rect.height;
-        //m_screenWidth = canvas.GetComponent<RectTransform>().rect.width;
+        
+        m_screenHeight = Constants.SCREEN_HEIGHT;
+        m_screenWidth = Constants.SCREEN_WIDTH;
 
         Logger.Log("WordManager-Awake", string.Format("Screen width: {0}, and height: {1}", m_screenWidth, m_screenHeight));
     }
@@ -162,8 +162,8 @@ public class WordManager : MonoBehaviour
 
         float containerWidth = wordLen * slotWidth + SPACE_BETWEEN_LETTERS * (wordLen - 1);
         float containerOffsetX = (m_screenWidth - containerWidth) / 2 + slotWidth / 2;
-        float containerOffsetY1 = -m_screenHeight / 2 + slotHeight / 2 + 5;
-        float containerOffsetY2 = -m_screenHeight / 2 - slotHeight / 2 - 17;
+        float containerOffsetY1 = -m_screenHeight / 2 + slotHeight / 2 + SPACE_UP;
+        float containerOffsetY2 = -m_screenHeight / 2 - slotHeight / 2 - SPACE_DOWN;
 
         CreateWord(word1, containerOffsetX, containerOffsetY1, m_sprWordBg1, m_sprWord1, m_slotList1);
         CreateWord(word2, containerOffsetX, containerOffsetY2, m_sprWordBg2, m_sprWord2, m_slotList2);
@@ -335,6 +335,127 @@ public class WordManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void UseHint()
+    {
+        if (m_type == WordManagerType.Single)
+        {
+            UseHintSingle();
+        }
+        else
+        {
+            UseHintDouble();
+        }
+    }
+
+    private void UseHintSingle()
+    {
+        ItemSlot firstSlot = null;
+        ItemSlot secondSlot = null;
+
+        for (int i = 0; i < m_slotListSingle.Count; i++)
+        {
+            if (!m_slotListSingle[i].CheckLetter(m_wordSingle))
+            {
+                if (firstSlot == null)
+                {
+                    firstSlot = m_slotListSingle[i];
+                }
+                else if (firstSlot.CheckLetter(m_wordSingle, m_slotListSingle[i].GetLetter()))
+                {
+                    secondSlot = m_slotListSingle[i];
+                    break;
+                }
+            }
+        }
+
+        if (firstSlot != null && secondSlot != null)
+        {
+            MakeHintMove(firstSlot, secondSlot);
+        }
+    }
+
+    private void UseHintDouble()
+    {
+        ItemSlot firstSlot = null;
+        ItemSlot secondSlot = null;
+        string word = "";
+
+        for (int i = 0; i < m_slotList1.Count; i++)
+        {
+            if (!m_slotList1[i].CheckLetter(m_word1))
+            {
+                if (firstSlot == null)
+                {
+                    firstSlot = m_slotList1[i];
+                    word = m_word1;
+                }
+                else if (firstSlot.CheckLetter(word, m_slotList1[i].GetLetter()))
+                {
+                    secondSlot = m_slotList1[i];
+                    break;
+                }
+            }
+        }
+
+        if (firstSlot != null && secondSlot != null)
+        {
+            MakeHintMove(firstSlot, secondSlot);
+            return;
+        }
+
+        for (int i = 0; i < m_slotList2.Count; i++)
+        {
+            if (!m_slotList2[i].CheckLetter(m_word2))
+            {
+                if (firstSlot == null)
+                {
+                    firstSlot = m_slotList2[i];
+                    word = m_word2;
+                }
+                else if (firstSlot.CheckLetter(word, m_slotList2[i].GetLetter()))
+                {
+                    secondSlot = m_slotList2[i];
+                    break;
+                }
+            }
+        }
+
+        if (firstSlot != null && secondSlot != null)
+        {
+            MakeHintMove(firstSlot, secondSlot);
+        }
+    }
+
+    private void MakeHintMove(ItemSlot firstSlot, ItemSlot secondSlot)
+    {
+        GameObject firstItemGO = firstSlot.GetItemGO();
+        GameObject secondItemGO = secondSlot.GetItemGO();
+
+        firstItemGO.GetComponent<RectTransform>().SetAsLastSibling();
+        secondItemGO.GetComponent<RectTransform>().SetAsLastSibling();
+        Vector2 firstItemPos = firstItemGO.GetComponent<RectTransform>().anchoredPosition;
+        Vector2 secondItemPos = secondItemGO.GetComponent<RectTransform>().anchoredPosition;
+
+        float intervalX = Math.Abs(firstItemPos.x - secondItemPos.x) / 2 + Math.Min(firstItemPos.x, secondItemPos.x);
+        Vector2 intervalPoint = new Vector2(intervalX, -m_screenHeight / 2 + 80);
+
+        LeanTween.move(firstItemGO.GetComponent<RectTransform>(), intervalPoint, HINT_ANIM_DURATION).setOnComplete(() =>
+        {
+            LeanTween.move(firstItemGO.GetComponent<RectTransform>(), secondItemPos, HINT_ANIM_DURATION).setOnComplete(() =>
+            {
+                secondSlot.SetItem(firstItemGO, true, true);
+            });
+        });
+
+        LeanTween.move(secondItemGO.GetComponent<RectTransform>(), intervalPoint, HINT_ANIM_DURATION).setOnComplete(() =>
+        {
+            LeanTween.move(secondItemGO.GetComponent<RectTransform>(), firstItemPos, HINT_ANIM_DURATION).setOnComplete(() =>
+            {
+                firstSlot.SetItem(secondItemGO, true, true);
+            });
+        });
     }
 
     public void Cleanup()
