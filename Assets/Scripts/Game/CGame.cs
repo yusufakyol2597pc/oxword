@@ -87,21 +87,7 @@ public abstract class CGame : MonoBehaviour
 
     protected void AnimateGainedCoin()
     {
-        SoundManager.Instance.PlaySound(SoundType.CoinCount);
-        float animDuration = 0.4f;
-        m_gainedCoinText.text = "+" + m_point;
-        m_gainedCoinText.alpha = 1f;
-        m_gainedCoinText.gameObject.SetActive(true);
-
-        RectTransform rectTransform = m_gainedCoinText.gameObject.GetComponent<RectTransform>();
-        LeanTween.moveY(rectTransform, rectTransform.anchoredPosition.y - 25, animDuration).setOnComplete(() => {
-            ResetAnimatedCoin();
-        });
-
-        LeanTween.value(gameObject, 1f, 0.5f, animDuration).setOnUpdate((float val) =>
-        {
-            m_gainedCoinText.alpha = val;
-        });
+        StartCoroutine(AnimateGainedCoinInternal());
     }
 
     IEnumerator AnimateGainedCoinInternal()
@@ -115,9 +101,7 @@ public abstract class CGame : MonoBehaviour
         m_gainedCoinText.gameObject.SetActive(true);
 
         RectTransform rectTransform = m_gainedCoinText.gameObject.GetComponent<RectTransform>();
-        LeanTween.moveY(rectTransform, rectTransform.anchoredPosition.y - 25, animDuration).setOnComplete(() => {
-            ResetAnimatedCoin();
-        });
+        LeanTween.moveY(rectTransform, rectTransform.anchoredPosition.y - 25, animDuration).setOnComplete(ResetAnimatedCoin);
 
         LeanTween.value(gameObject, 1f, 0.5f, animDuration).setOnUpdate((float val) =>
         {
@@ -167,6 +151,12 @@ public abstract class CGame : MonoBehaviour
 
     protected void PlaySuccessSound()
     {
+        StartCoroutine(PlaySuccessSoundInternal());
+    }
+
+    IEnumerator PlaySuccessSoundInternal()
+    {
+        yield return new WaitForSeconds(1);
         SoundManager.Instance.PlaySound(SoundType.GameSuccess);
     }
 

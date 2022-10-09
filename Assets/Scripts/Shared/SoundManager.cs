@@ -16,7 +16,7 @@ public enum SoundType
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance;
-    AudioSource m_audioData;
+    [SerializeField] List<AudioSource> m_audioDataPool;
 
     // Game sounds
     [SerializeField] AudioClip m_successClip;
@@ -31,8 +31,6 @@ public class SoundManager : MonoBehaviour
             Destroy(Instance);
         else
             Instance = this;
-
-        m_audioData = GetComponent<AudioSource>();
     }
 
     public void PlaySound(SoundType type)
@@ -41,32 +39,47 @@ public class SoundManager : MonoBehaviour
         switch (type)
         {
             case SoundType.GameSuccess:
-                m_audioData.clip = m_successClip;
+                Play(m_successClip);
                 break;
             case SoundType.GameFailure:
-                m_audioData.clip = m_failClip;
+                Play(m_failClip);
                 break;
             case SoundType.SelectLetter:
-                m_audioData.clip = m_selectLetterClip;
+                Play(m_selectLetterClip);
                 break;
             case SoundType.DropLetter:
-                m_audioData.clip = m_dropLetterClip;
+                Play(m_dropLetterClip);
                 break;
             case SoundType.CoinCount:
-                m_audioData.clip = m_coinCountClip;
+                Play(m_coinCountClip);
                 break;
             default:
                 Logger.Log(METHOD, "Sound type is not found.");
                 return;
         }
+    }
 
-        try
+    void Play(AudioClip audioClip)
+    {
+        const string METHOD = "SoundManager-Play";
+
+        foreach (AudioSource audioSource in m_audioDataPool)
         {
-            m_audioData.Play(0);
-        }
-        catch(Exception e)
-        {
-            Logger.Log(METHOD, "Couldn't play sound: " + e.ToString());
+            if (!audioSource.isPlaying)
+            {
+                audioSource.clip = audioClip;
+
+                try
+                {
+                    audioSource.Play(0);
+                }
+                catch (Exception e)
+                {
+                    Logger.Log(METHOD, "Couldn't play sound: " + e.ToString());
+                }
+
+                return;
+            }
         }
     }
 }

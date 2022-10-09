@@ -47,7 +47,7 @@ public class UserState : MonoBehaviour
         httpHandler = GetComponent<HttpHandler>();
 
         WordsFileName = Application.persistentDataPath + "/SavedWords.txt";
-        UserSaveFileName = Application.persistentDataPath + "/UserSave.txt";
+        UserSaveFileName = Application.persistentDataPath + "/UserSave2.txt";
     }
 
     // Start is called before the first frame update
@@ -55,6 +55,7 @@ public class UserState : MonoBehaviour
     {
         Logger.Log("Initialize", "Check if user save file exists.");
 
+        Application.targetFrameRate = 60;
         await Authenticator.Authenticate();
 
         if (File.Exists(UserSaveFileName))

@@ -38,7 +38,7 @@ public class CGameCustomLevel : CGame
     {
         WordManager.Instance.DisableDragging();
         PlaySuccessSound();
-        base.AnimateGainedCoin();
+        AnimateGainedCoin();
 
         m_isRunning = false;
         var d1 = new Dictionary<string, string> { { "point", m_point.ToString() } };
