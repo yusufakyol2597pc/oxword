@@ -37,6 +37,7 @@ public class CGameCustomLevel : CGame
     public override void OnSucceed()
     {
         WordManager.Instance.DisableDragging();
+        PlaySuccessSound();
         base.AnimateGainedCoin();
 
         m_isRunning = false;
@@ -49,6 +50,7 @@ public class CGameCustomLevel : CGame
     public override void OnFail()
     {
         WordManager.Instance.DisableDragging();
+        PlayFailSound();
         m_isRunning = false;
         m_goBgErrorPage.SetActive(true);
         m_resultText.text = LanguageManager.Instance.Translate("fail_text");

@@ -14,7 +14,7 @@ public class MenuController : MonoBehaviour
     void Awake()
     {
         if (Instance != null)
-            GameObject.Destroy(Instance);
+            Destroy(Instance);
         else
             Instance = this;
     }

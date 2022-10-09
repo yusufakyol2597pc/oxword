@@ -1,1 +1,0 @@
-{"words":[{"id":"","type":"Synonym","words":["Okul","Mektep"]},{"id":"","type":"Opposite","words":["Cömert","Cimri"]},{"id":"","type":"SingleWord","words":["Kelime"]},{"id":"","type":"SingleWord","words":["Deneme"]},{"id":"","type":"Opposite","words":["TEMBEL","ÇALIŞKAN"]},{"id":"","type":"Opposite","words":["Zeki","Aptal"]},{"id":"","type":"SingleWord","words":["Su"]}]}

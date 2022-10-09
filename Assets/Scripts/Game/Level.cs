@@ -104,6 +104,7 @@ public class Level : MonoBehaviour
     public void OnSucceed()
     {
         WordController.Instance.DisableDragging();
+        SoundManager.Instance.PlaySound(SoundType.GameSuccess);
         AnimateGainedCoin();
 
         m_iCustomLevelCounter++;

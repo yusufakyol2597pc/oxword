@@ -87,6 +87,28 @@ public abstract class CGame : MonoBehaviour
 
     protected void AnimateGainedCoin()
     {
+        SoundManager.Instance.PlaySound(SoundType.CoinCount);
+        float animDuration = 0.4f;
+        m_gainedCoinText.text = "+" + m_point;
+        m_gainedCoinText.alpha = 1f;
+        m_gainedCoinText.gameObject.SetActive(true);
+
+        RectTransform rectTransform = m_gainedCoinText.gameObject.GetComponent<RectTransform>();
+        LeanTween.moveY(rectTransform, rectTransform.anchoredPosition.y - 25, animDuration).setOnComplete(() => {
+            ResetAnimatedCoin();
+        });
+
+        LeanTween.value(gameObject, 1f, 0.5f, animDuration).setOnUpdate((float val) =>
+        {
+            m_gainedCoinText.alpha = val;
+        });
+    }
+
+    IEnumerator AnimateGainedCoinInternal()
+    {
+        yield return new WaitForSeconds(1.5f);
+
+        SoundManager.Instance.PlaySound(SoundType.CoinCount);
         float animDuration = 0.4f;
         m_gainedCoinText.text = "+" + m_point;
         m_gainedCoinText.alpha = 1f;
@@ -121,6 +143,8 @@ public abstract class CGame : MonoBehaviour
         }
         if ((float)m_counterMaxTime - m_time < 0)
         {
+            m_time = 0;
+            m_isRunning = false;
             OnFail();
         }
     }
@@ -139,5 +163,15 @@ public abstract class CGame : MonoBehaviour
         }
         WordManager.Instance.UseHint();
         UserState.Instance.OnHintUsed();
+    }
+
+    protected void PlaySuccessSound()
+    {
+        SoundManager.Instance.PlaySound(SoundType.GameSuccess);
+    }
+
+    protected void PlayFailSound()
+    {
+        SoundManager.Instance.PlaySound(SoundType.GameFailure);
     }
 }

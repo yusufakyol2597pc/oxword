@@ -45,6 +45,7 @@ public class Item : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
         WordManager.Instance.OnStartDrag();
+        SoundManager.Instance.PlaySound(SoundType.SelectLetter);
         canvasGroup.alpha = 0.6f;
         for(int i = 0; i < WordManager.Instance.canvasGroupList.Count; i++)
         {
@@ -82,6 +83,7 @@ public class Item : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
             if (itemSlot.m_item.GetComponent<Item>() == this)
             {
                 itemSlot.SetItem(gameObject, false, true);
+                SoundManager.Instance.PlaySound(SoundType.DropLetter);
             }
         } 
     }
