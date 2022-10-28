@@ -11,6 +11,7 @@ public abstract class CGame : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI m_counterText;
     [SerializeField] protected TextMeshProUGUI m_gainedCoinText;
     [SerializeField] protected TextMeshProUGUI m_coinText;
+    [SerializeField] protected TextMeshProUGUI m_hintCountText;
 
     private Vector3 m_gainedCoinPos;
 
@@ -51,6 +52,7 @@ public abstract class CGame : MonoBehaviour
         m_goPlayAgainButton.SetActive(false);
         m_goBgErrorPage?.SetActive(false);
         m_nextLevelButton.interactable = false;
+        m_hintCountText.text = UserState.Instance.GetHintCount().ToString();
 
         StartGame();
     }
@@ -147,6 +149,7 @@ public abstract class CGame : MonoBehaviour
         }
         WordManager.Instance.UseHint();
         UserState.Instance.OnHintUsed();
+        m_hintCountText.text = UserState.Instance.GetHintCount().ToString();
     }
 
     protected void PlaySuccessSound()

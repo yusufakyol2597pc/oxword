@@ -47,7 +47,7 @@ public class UserState : MonoBehaviour
         httpHandler = GetComponent<HttpHandler>();
 
         WordsFileName = Application.persistentDataPath + "/SavedWords.txt";
-        UserSaveFileName = Application.persistentDataPath + "/UserSave2.txt";
+        UserSaveFileName = Application.persistentDataPath + "/UserSave3.txt";
     }
 
     // Start is called before the first frame update
@@ -130,7 +130,7 @@ public class UserState : MonoBehaviour
         StartCoroutine(GetWords());
     }
 
-    public void SaveGame(bool saveToCloud = false)
+    public void SaveGame(bool saveToCloud = true)
     {
         if (saveToCloud == true)
         {
