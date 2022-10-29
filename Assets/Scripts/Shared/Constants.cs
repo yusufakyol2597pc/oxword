@@ -21,4 +21,7 @@ public class Constants
     };
 
     public static string FAIL_SCREEN_BG_COLOR = "#F24747";
+
+    public static int POINT_COMPLEXITY_CONSTANT = 2;
+    public static int DURATION_COMPLEXITY_CONSTANT = 3;
 }

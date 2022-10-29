@@ -10,6 +10,7 @@ public class Item : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
     private RectTransform m_rectTransform;
     private CanvasGroup canvasGroup;
     private string m_letter = "0";
+    private int m_distance = 0;
     private bool m_bIslocked = false;
 
     [SerializeField]
@@ -21,10 +22,12 @@ public class Item : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
         canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    public void SetLetter(string letter)
+    public void SetLetter(string letter, int distance = 0)
     {
         m_letter = letter.ToUpper();
         transform.Find("Letter").GetComponent<TMPro.TextMeshProUGUI>().text = m_letter;
+        m_distance = distance;
+        transform.Find("Distance").GetComponent<TMPro.TextMeshProUGUI>().text = m_distance.ToString();
     }
 
     public string GetLetter()

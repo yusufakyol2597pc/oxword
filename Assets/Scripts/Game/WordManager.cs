@@ -52,6 +52,8 @@ public class WordManager : MonoBehaviour
 
     private CGame m_game;
 
+    List<string> m_calculatedLetters = new List<string>();
+
     void Awake()
     {
         if (Instance != null)
@@ -67,7 +69,7 @@ public class WordManager : MonoBehaviour
         Logger.Log("WordManager-Awake", string.Format("Screen width: {0}, and height: {1}", m_screenWidth, m_screenHeight));
     }
 
-    public void Initialize(
+    public int Initialize(
         CGame game,
         string word1,
         string word2,
@@ -91,10 +93,10 @@ public class WordManager : MonoBehaviour
 
         string wordShuffled1, wordShuffled2;
         ShuffleWords(word1, word2, out wordShuffled1, out wordShuffled2);
-        CreateWords(wordShuffled1, wordShuffled2);
+        return CreateWords(wordShuffled1, wordShuffled2);
     }
 
-    public void Initialize(
+    public int Initialize(
         CGame game,
         string word,
         Sprite sprWord,
@@ -112,7 +114,7 @@ public class WordManager : MonoBehaviour
 
         string wordShuffled;
         ShuffleWord(word, out wordShuffled);
-        CreateWords(wordShuffled);
+        return CreateWords(wordShuffled);
     }
 
     void ShuffleWords(string word1, string word2, out string shuffledWord1, out string shuffledWord2)
@@ -124,7 +126,7 @@ public class WordManager : MonoBehaviour
         shuffledWord1 = word1;
         shuffledWord2 = word2;
 
-        while (!IsSuffleSuccessfull(word1, shuffledWord1) && !IsSuffleSuccessfull(word2, shuffledWord2))
+        while (!IsSuffleSuccessfull(word1, shuffledWord1) || !IsSuffleSuccessfull(word2, shuffledWord2))
         {
             concatWord = new string(concatWord.ToCharArray().
                         OrderBy(s => (num.Next(2) % 2) == 0).ToArray());
@@ -163,7 +165,7 @@ public class WordManager : MonoBehaviour
         return true;
     }
 
-    void CreateWords(string word1, string word2)
+    int CreateWords(string word1, string word2)
     {
         slotTemplate.gameObject.SetActive(false);
         itemTemplate.gameObject.SetActive(false);
@@ -184,11 +186,13 @@ public class WordManager : MonoBehaviour
         float containerOffsetY1 = -m_screenHeight / 2 + slotHeight / 2 + SPACE_UP;
         float containerOffsetY2 = -m_screenHeight / 2 - slotHeight / 2 - SPACE_DOWN;
 
-        CreateWord(word1, containerOffsetX, containerOffsetY1, m_sprWordBg1, m_sprWord1, m_slotList1);
-        CreateWord(word2, containerOffsetX, containerOffsetY2, m_sprWordBg2, m_sprWord2, m_slotList2);
+        int totalDistance = 0;
+        totalDistance = CreateWord(word1, containerOffsetX, containerOffsetY1, m_sprWordBg1, m_sprWord1, m_slotList1, 0);
+        totalDistance += CreateWord(word2, containerOffsetX, containerOffsetY2, m_sprWordBg2, m_sprWord2, m_slotList2, 1);
+        return totalDistance;
     }
 
-    void CreateWords(string word)
+    int CreateWords(string word)
     {
         slotTemplate.gameObject.SetActive(false);
         itemTemplate.gameObject.SetActive(false);
@@ -201,16 +205,19 @@ public class WordManager : MonoBehaviour
         float containerOffsetX = (m_screenWidth - containerWidth) / 2 + slotWidth / 2;
         float containerOffsetY = -m_screenHeight / 2;
 
-        CreateWord(word, containerOffsetX, containerOffsetY, m_sprWordBgSingle, m_sprWordSingle, m_slotListSingle);
+        return CreateWord(word, containerOffsetX, containerOffsetY, m_sprWordBgSingle, m_sprWordSingle, m_slotListSingle, 0);
     }
 
-    private void CreateWord(string word, float containerOffsetX, float containerOffsetY, Sprite sprWordBg, Sprite sprWord, List<ItemSlot> slotList)
+    int CreateWord(string word, float containerOffsetX, float containerOffsetY, Sprite sprWordBg, Sprite sprWord, List<ItemSlot> slotList, int wordIndex)
     {
         float slotWidth = slotTemplate.GetComponent<RectTransform>().rect.width;
+        int totalDistance = 0;
 
         for (int i = 0; i < word.Length; i++)
         {
             string letter = word.Substring(i, 1);
+            int distance = GetDistance(letter, i, wordIndex);
+            totalDistance += distance;
 
             // Instantiate slot
             Transform slotTransform = Instantiate(slotTemplate, wordContainer);
@@ -222,7 +229,7 @@ public class WordManager : MonoBehaviour
             // Instantiate item
             Transform itemTransform = Instantiate(itemTemplate, wordContainer);
             slotTransform.GetComponent<ItemSlot>().SetItem(itemTransform.gameObject, false, false);
-            itemTransform.GetComponent<Item>().SetLetter(letter);
+            itemTransform.GetComponent<Item>().SetLetter(letter, distance);
             itemTransform.gameObject.SetActive(true);
             slotTransform.GetComponent<ItemSlot>().SetConfig(sprWordBg, sprWord, i);
 
@@ -231,6 +238,70 @@ public class WordManager : MonoBehaviour
 
             canvasGroupList.Add(itemTransform.GetComponent<CanvasGroup>());
         }
+        return totalDistance;
+    }
+
+    int GetDistance(string letter, int letterIndex, int wordIndex)
+    {
+        if (m_type == WordManagerType.Single)
+        {
+            return GetDistanceSingle(letter, letterIndex);
+        }
+        return GetDistanceDouble(letter, letterIndex, wordIndex);
+    }
+
+    int GetDistanceSingle(string letter, int index)
+    {
+        int distance = 0;
+        int occurences = m_calculatedLetters.Where(x => x.Equals(letter)).Count();
+        int counter = 0;
+        for (int i = 0; i < m_wordSingle.Length; i++)
+        {
+            if (m_wordSingle[i].ToString() == letter)
+            {
+                counter++;
+                if (counter > occurences)
+                {
+                    distance = Math.Abs(index - i);
+                }
+            }
+        }
+        m_calculatedLetters.Add(letter);
+        return distance;
+    }
+
+    int GetDistanceDouble(string letter, int letterIndex, int wordIndex)
+    {
+        int distance = 0;
+        int occurences = m_calculatedLetters.Where(x => x.Equals(letter)).Count();
+        int counter = 0;
+        for (int i = 0; i < m_word1.Length; i++)
+        {
+            if (m_word1[i].ToString() == letter)
+            {
+                counter++;
+                if (counter > occurences)
+                {
+                    distance = Math.Abs(letterIndex - i) + wordIndex;
+                }
+            }
+        }
+        if (distance == 0)
+        {
+            for (int i = 0; i < m_word2.Length; i++)
+            {
+                if (m_word2[i].ToString() == letter)
+                {
+                    counter++;
+                    if (counter > occurences)
+                    {
+                        distance = 1 - wordIndex + Math.Abs(letterIndex - i);
+                    }
+                }
+            }
+        }
+        m_calculatedLetters.Add(letter);
+        return distance;
     }
 
     public void OnStartDrag()

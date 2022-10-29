@@ -26,7 +26,7 @@ public abstract class CGame : MonoBehaviour
     protected int m_counterMaxTime = 20;
     protected bool m_isRunning;
 
-    protected int m_point = 8;
+    protected int m_point = 0;
     public GameState m_gameState;
 
     protected static int s_iCustomLevelCounter = 0;

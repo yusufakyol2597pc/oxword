@@ -23,7 +23,6 @@ public class CGameSingleWord : CGame
         m_goFailX.SetActive(false);
 
         int levelIndex = m_gameState.m_iLevel - 1;
-        m_resultText.text = m_point + " " + LanguageManager.Instance.Translate("point");
         m_levelText.text = "Level " + m_gameState.m_iLevel;
 
         int colorIndex = levelIndex % Constants.BG_COLORS.GetLength(0);
@@ -34,18 +33,20 @@ public class CGameSingleWord : CGame
         int wordIndex = levelIndex % m_levelWords.Count;
         string word = m_levelWords[wordIndex][0];
 
-        m_counterMaxTime = 10 * ((word.Length / DURATION_CONSTANT) + 1);
-
         Color colorBg;
         ColorUtility.TryParseHtmlString(bgColor, out colorBg);
         m_BgImage.color = colorBg;
 
-        WordManager.Instance.Initialize(
+        int complexity = WordManager.Instance.Initialize(
                 this,
                 word,
                 m_sprWordList[sprWordIndex],
                 m_sprWordBgList[sprWordIBgndex]
             );
+
+        m_point = complexity * Constants.POINT_COMPLEXITY_CONSTANT;
+        m_counterMaxTime = complexity * Constants.DURATION_COMPLEXITY_CONSTANT;
+        m_resultText.text = m_point + " " + LanguageManager.Instance.Translate("point");
     }
 
     public override void OnSucceed()

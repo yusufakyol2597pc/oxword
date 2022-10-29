@@ -25,7 +25,6 @@ public class CGameDoubleWord : CGame
         m_goFailX.SetActive(false);
 
         int levelIndex = m_gameState.m_iLevel - 1;
-        m_resultText.text = m_point + " " + LanguageManager.Instance.Translate("point");
         m_levelText.text = "Level " + m_gameState.m_iLevel;
 
         int colorIndex = levelIndex % Constants.BG_COLORS.GetLength(0);
@@ -45,9 +44,7 @@ public class CGameDoubleWord : CGame
         string upperWord = m_levelWords[wordIndex][0];
         string lowerWord = m_levelWords[wordIndex][1];
 
-        m_counterMaxTime = 10 * ((upperWord.Length + lowerWord.Length) / DURATION_CONSTANT);
-
-        WordManager.Instance.Initialize(
+        int complexity = WordManager.Instance.Initialize(
                 this,
                 upperWord,
                 lowerWord,
@@ -56,6 +53,10 @@ public class CGameDoubleWord : CGame
                 m_sprUpperLetterBgList[sprWordBgIndex],
                 m_sprLowerLetterBgList[sprWordBgIndex]
            );
+
+        m_point = complexity * Constants.POINT_COMPLEXITY_CONSTANT;
+        m_counterMaxTime = complexity * Constants.DURATION_COMPLEXITY_CONSTANT;
+        m_resultText.text = m_point + " " + LanguageManager.Instance.Translate("point");
     }
 
     public override void OnSucceed()
