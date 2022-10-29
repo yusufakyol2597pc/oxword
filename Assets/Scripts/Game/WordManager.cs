@@ -124,7 +124,7 @@ public class WordManager : MonoBehaviour
         shuffledWord1 = word1;
         shuffledWord2 = word2;
 
-        while (shuffledWord1 == word1 || shuffledWord2 == word2)
+        while (!IsSuffleSuccessfull(word1, shuffledWord1) && !IsSuffleSuccessfull(word2, shuffledWord2))
         {
             concatWord = new string(concatWord.ToCharArray().
                         OrderBy(s => (num.Next(2) % 2) == 0).ToArray());
@@ -140,11 +140,27 @@ public class WordManager : MonoBehaviour
 
         shuffledWord = word;
 
-        while (shuffledWord == word)
+        while (!IsSuffleSuccessfull(word, shuffledWord, true))
         {
             shuffledWord = new string(word.ToCharArray().
                         OrderBy(s => (num.Next(2) % 2) == 0).ToArray());
         }
+    }
+
+    bool IsSuffleSuccessfull(string word, string shuffledWord, bool checkException = false)
+    {
+        if (checkException == true && word.Length == 3 && word.Distinct().Count() != word.Length && word != shuffledWord)
+        {
+            return true;
+        }
+        for (int counter = 0; counter < word.Length; counter++)
+        {
+           if (word[counter] == shuffledWord[counter])
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     void CreateWords(string word1, string word2)

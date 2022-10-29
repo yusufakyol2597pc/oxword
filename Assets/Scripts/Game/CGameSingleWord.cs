@@ -34,7 +34,7 @@ public class CGameSingleWord : CGame
         int wordIndex = levelIndex % m_levelWords.Count;
         string word = m_levelWords[wordIndex][0];
 
-        m_counterMaxTime = 10 * (word.Length / DURATION_CONSTANT);
+        m_counterMaxTime = 10 * ((word.Length / DURATION_CONSTANT) + 1);
 
         Color colorBg;
         ColorUtility.TryParseHtmlString(bgColor, out colorBg);
