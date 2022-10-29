@@ -39,6 +39,9 @@ public class WordManager : MonoBehaviour
     private Sprite m_sprWordBg2;
     private Sprite m_sprWordBgSingle;
 
+    [SerializeField] private Sprite m_sprFailLetter;
+    [SerializeField] private Sprite m_sprFailSlot;
+
     private string m_word1;
     private string m_word2;
     private string m_wordSingle;
@@ -456,6 +459,28 @@ public class WordManager : MonoBehaviour
                 firstSlot.SetItem(secondItemGO, true, true);
             });
         });
+    }
+
+    public void OnGameFailed()
+    {
+        if (m_type == WordManagerType.Single)
+        {
+            foreach(ItemSlot slot in m_slotListSingle)
+            {
+                slot.OnGameFailed(m_sprFailLetter, m_sprFailSlot);
+            }
+        }
+        else
+        {
+            foreach (ItemSlot slot in m_slotList1)
+            {
+                slot.OnGameFailed(m_sprFailLetter, m_sprFailSlot);
+            }
+            foreach (ItemSlot slot in m_slotList2)
+            {
+                slot.OnGameFailed(m_sprFailLetter, m_sprFailSlot);
+            }
+        }
     }
 
     public void Cleanup()

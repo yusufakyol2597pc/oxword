@@ -14,9 +14,13 @@ public class CGameSingleWord : CGame
 
     [SerializeField] private Image m_BgImage;
 
+    [SerializeField] private GameObject m_goFailX;
+
     public override void StartGame()
     {
+
         gameObject.SetActive(true);
+        m_goFailX.SetActive(false);
 
         int levelIndex = m_gameState.m_iLevel - 1;
         m_resultText.text = m_point + " " + LanguageManager.Instance.Translate("point");
@@ -65,9 +69,10 @@ public class CGameSingleWord : CGame
         WordManager.Instance.DisableDragging();
         PlayFailSound();
         m_isRunning = false;
-        m_goBgErrorPage.SetActive(true);
+        m_BgImage.color = Utils.GetColorFromString(Constants.FAIL_SCREEN_BG_COLOR);
+        m_goFailX.SetActive(true);
         m_resultText.text = LanguageManager.Instance.Translate("fail_text");
-        WordManager.Instance.Cleanup();
+        WordManager.Instance.OnGameFailed();
         m_nextLevelButton?.gameObject.SetActive(false);
         m_goPlayAgainButton.SetActive(true);
     }

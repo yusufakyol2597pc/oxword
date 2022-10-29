@@ -7,7 +7,7 @@ public class Constants
     public static string SOUND_IS_ON = "soundIsOn";
     public static string VIBRATION_IS_ON = "soundIsOn";
 
-    public static int CUSTOM_LEVEL_INTERVAL = 5;
+    public static int CUSTOM_LEVEL_INTERVAL = 1;
 
     public static int SCREEN_WIDTH = 900;
     public static int SCREEN_HEIGHT = 414;
@@ -19,4 +19,6 @@ public class Constants
         { "#f8c49e", "#b3d499" },
         { "#fdb2b2", "#86dbcf" }
     };
+
+    public static string FAIL_SCREEN_BG_COLOR = "#F24747";
 }

@@ -43,6 +43,18 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         m_letterIndex = index;
     }
 
+    public void OnGameFailed(Sprite sprLetter, Sprite sprSlot)
+    {
+        GetComponent<Image>().sprite = sprSlot;
+        m_sprBg = sprSlot;
+        if (m_item != null)
+        {
+            m_item.GetComponent<Item>().SetLetter("");
+            m_item.GetComponent<Image>().sprite = sprLetter;
+            m_sprWord = sprLetter;
+        }
+    }
+
     public Sprite GetSprBg()
     {
         return m_sprBg;

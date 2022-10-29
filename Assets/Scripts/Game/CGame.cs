@@ -18,8 +18,6 @@ public abstract class CGame : MonoBehaviour
     [SerializeField] protected Button m_nextLevelButton;
     [SerializeField] protected GameObject m_goPlayAgainButton;
 
-    [SerializeField] protected GameObject m_goBgErrorPage;
-
     [SerializeField] private int m_iLevel;
 
     protected List<List<string>> m_levelWords;
@@ -50,7 +48,6 @@ public abstract class CGame : MonoBehaviour
         m_isRunning = true;
         m_nextLevelButton.gameObject.SetActive(true);
         m_goPlayAgainButton.SetActive(false);
-        m_goBgErrorPage?.SetActive(false);
         m_nextLevelButton.interactable = false;
         m_hintCountText.text = UserState.Instance.GetHintCount().ToString();
 

@@ -12,9 +12,18 @@ public class CGameCustomLevel : CGame
     [SerializeField] private Sprite m_sprLetter;
     [SerializeField] private Sprite m_sprLetterBg;
 
+    [SerializeField] private Image m_BgImage;
+    [SerializeField] private GameObject m_goFailX;
+    [SerializeField] private GameObject m_goBgPattern;
+
+    private string BG_COLOR = "#9013FE";
+
     public override void StartGame()
     {
         gameObject.SetActive(true);
+        m_goFailX.SetActive(false);
+        m_goBgPattern.SetActive(true);
+        m_BgImage.color = Utils.GetColorFromString(BG_COLOR);
 
         int levelIndex = m_gameState.m_iLevel - 1;
 
@@ -52,9 +61,13 @@ public class CGameCustomLevel : CGame
         WordManager.Instance.DisableDragging();
         PlayFailSound();
         m_isRunning = false;
-        m_goBgErrorPage.SetActive(true);
         m_resultText.text = LanguageManager.Instance.Translate("fail_text");
-        WordManager.Instance.Cleanup();
+
+        m_BgImage.color = Utils.GetColorFromString(Constants.FAIL_SCREEN_BG_COLOR);
+        m_goFailX.SetActive(true);
+        m_goBgPattern.SetActive(false);
+
+        WordManager.Instance.OnGameFailed();
         m_nextLevelButton?.gameObject.SetActive(false);
         m_goPlayAgainButton.SetActive(true);
     }
