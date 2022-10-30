@@ -41,4 +41,9 @@ public class MenuController : MonoBehaviour
         m_currentMenu = menu;
         menu.Open();
     }
+
+    public void ClosePopup()
+    {
+        PopUpManager.Instance.CloseActivePopup();
+    }
 }
