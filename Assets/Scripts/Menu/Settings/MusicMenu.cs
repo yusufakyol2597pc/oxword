@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MusicMenu : CMenu
+public class MusicMenu : CPopUp
 {
     [SerializeField] private SwitchToggle m_switchToggleMusic;
     [SerializeField] private SwitchToggle m_switchToggleSoundFx;

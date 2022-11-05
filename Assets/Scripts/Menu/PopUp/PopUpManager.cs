@@ -16,6 +16,11 @@ public class PopUpManager : MonoBehaviour
             Instance = this;
     }
 
+    void Start()
+    {
+        CloseOpenPopups();
+    }
+
     public void OpenPopUp(CPopUp popup)
     {
         if (m_activePopUp != null)
@@ -31,6 +36,19 @@ public class PopUpManager : MonoBehaviour
         if (m_activePopUp != null)
         {
             m_activePopUp.Close(GetComponent<Animator>());
+        }
+    }
+
+    void CloseOpenPopups()
+    {
+        Transform[] popupTransforms = GetComponentsInChildren<Transform>();
+        foreach (Transform popupT in popupTransforms)
+        {
+            CPopUp popUp = popupT.GetComponent<CPopUp>();
+            if (popUp != null)
+            {
+                popUp.Close();
+            }
         }
     }
 }

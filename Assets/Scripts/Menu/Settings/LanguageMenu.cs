@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 
-public class LanguageMenu : CMenu
+public class LanguageMenu : CPopUp
 {
     public override void Open()
     {

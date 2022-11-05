@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NotificationMenu : CMenu
+public class NotificationMenu : CPopUp
 {
     [SerializeField] private SwitchToggle m_switchToggleHint;
     [SerializeField] private SwitchToggle m_switchToggleNotification;
