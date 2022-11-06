@@ -18,7 +18,6 @@ public class CGameSingleWord : CGame
 
     public override void StartGame()
     {
-
         gameObject.SetActive(true);
         m_goFailX.SetActive(false);
 
@@ -37,23 +36,25 @@ public class CGameSingleWord : CGame
         ColorUtility.TryParseHtmlString(bgColor, out colorBg);
         m_BgImage.color = colorBg;
 
+
         int complexity = WordManager.Instance.Initialize(
                 this,
                 word,
                 m_sprWordList[sprWordIndex],
                 m_sprWordBgList[sprWordIBgndex]
             );
-
+        Logger.Log(word + " " + wordIndex + " " + complexity + " " + m_gameState.m_iLevel);
         m_point = complexity * Constants.POINT_COMPLEXITY_CONSTANT;
         m_counterMaxTime = complexity * Constants.DURATION_COMPLEXITY_CONSTANT;
         m_resultText.text = m_point + " " + LanguageManager.Instance.Translate("point");
+        m_isRunning = true;
     }
 
     public override void OnSucceed()
     {
         WordManager.Instance.DisableDragging();
         PlaySuccessSound();
-        base.AnimateGainedCoin();
+        AnimateGainedCoin();
 
         s_iCustomLevelCounter++;
 

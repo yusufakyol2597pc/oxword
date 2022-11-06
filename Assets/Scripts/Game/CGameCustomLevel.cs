@@ -33,14 +33,16 @@ public class CGameCustomLevel : CGame
         int wordIndex = levelIndex % m_levelWords.Count;
         string word = m_levelWords[wordIndex][0];
 
-        m_counterMaxTime = 10 * (word.Length / DURATION_CONSTANT);
-
-        WordManager.Instance.Initialize(
+        int complexity = WordManager.Instance.Initialize(
                 this,
                 word,
                 m_sprLetter,
                 m_sprLetterBg
             );
+        m_point = complexity * Constants.POINT_COMPLEXITY_CONSTANT;
+        m_counterMaxTime = complexity * Constants.DURATION_COMPLEXITY_CONSTANT;
+        m_resultText.text = m_point + " " + LanguageManager.Instance.Translate("point");
+        m_isRunning = true;
     }
 
     public override void OnSucceed()

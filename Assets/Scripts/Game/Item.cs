@@ -27,7 +27,7 @@ public class Item : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
         m_letter = letter.ToUpper();
         transform.Find("Letter").GetComponent<TMPro.TextMeshProUGUI>().text = m_letter;
         m_distance = distance;
-        transform.Find("Distance").GetComponent<TMPro.TextMeshProUGUI>().text = m_distance.ToString();
+        transform.Find("Distance").GetComponent<TMPro.TextMeshProUGUI>().text = m_distance > 0 ? m_distance.ToString() : "";
     }
 
     public string GetLetter()

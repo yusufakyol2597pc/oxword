@@ -78,6 +78,8 @@ public class WordManager : MonoBehaviour
         Sprite sprWordBg1,
         Sprite sprWordBg2)
     {
+        Cleanup();
+
         gameObject.SetActive(true);
         m_type = WordManagerType.Double;
         m_game = game;
@@ -102,6 +104,7 @@ public class WordManager : MonoBehaviour
         Sprite sprWord,
         Sprite sprWordBg)
     {
+        Cleanup();
         gameObject.SetActive(true);
         m_type = WordManagerType.Single;
         m_game = game;
@@ -429,6 +432,10 @@ public class WordManager : MonoBehaviour
 
     public void UseHint()
     {
+        if (!m_game.IsGameRunning())
+        {
+            return;
+        }
         if (m_type == WordManagerType.Single)
         {
             UseHintSingle();
@@ -584,5 +591,6 @@ public class WordManager : MonoBehaviour
         m_slotListSingle.Clear();
         m_generatedGOs.Clear();
         canvasGroupList.Clear();
+        m_calculatedLetters.Clear();
     }
 }

@@ -45,7 +45,6 @@ public abstract class CGame : MonoBehaviour
     public void PrepareStartGame()
     {
         m_time = 0;
-        m_isRunning = true;
         m_nextLevelButton.gameObject.SetActive(true);
         m_goPlayAgainButton.SetActive(false);
         m_nextLevelButton.interactable = false;
@@ -57,15 +56,12 @@ public abstract class CGame : MonoBehaviour
     public void PlayAgain()
     {
         Logger.Log("PlayAgain", "Clicked play again.");
-        WordManager.Instance.Cleanup();
         PrepareStartGame();
     }
 
     public void NextLevel()
     {
         Logger.Log("NextLevel", "Clicked next level.");
-
-        WordManager.Instance.Cleanup();
 
         if (s_iCustomLevelCounter >= Constants.CUSTOM_LEVEL_INTERVAL)
         {
@@ -123,12 +119,13 @@ public abstract class CGame : MonoBehaviour
             m_time += Time.deltaTime;
             int remainingTime = m_counterMaxTime - (int)m_time;
             m_counterText.text = "" + remainingTime;
-        }
-        if ((float)m_counterMaxTime - m_time < 0)
-        {
-            m_time = 0;
-            m_isRunning = false;
-            OnFail();
+
+            if ((float)m_counterMaxTime - m_time < 0)
+            {
+                m_time = 0;
+                m_isRunning = false;
+                OnFail();
+            }
         }
     }
 
@@ -163,5 +160,10 @@ public abstract class CGame : MonoBehaviour
     protected void PlayFailSound()
     {
         SoundManager.Instance.PlaySound(SoundType.GameFailure);
+    }
+
+    public bool IsGameRunning()
+    {
+        return m_isRunning;
     }
 }

@@ -57,6 +57,9 @@ public class CGameDoubleWord : CGame
         m_point = complexity * Constants.POINT_COMPLEXITY_CONSTANT;
         m_counterMaxTime = complexity * Constants.DURATION_COMPLEXITY_CONSTANT;
         m_resultText.text = m_point + " " + LanguageManager.Instance.Translate("point");
+        m_isRunning = true;
+
+        Logger.Log("StartGame with " + m_counterMaxTime + " max time");
     }
 
     public override void OnSucceed()
