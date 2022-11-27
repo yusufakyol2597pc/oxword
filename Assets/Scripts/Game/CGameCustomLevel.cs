@@ -30,8 +30,7 @@ public class CGameCustomLevel : CGame
         int colorIndex = levelIndex % Constants.BG_COLORS.GetLength(0);
         string bgColor = Constants.BG_COLORS[colorIndex, 0];
 
-        int wordIndex = levelIndex % m_levelWords.Count;
-        string word = m_levelWords[wordIndex][0];
+        string word = WordPool.Instance.GetSingleWord(m_gameState.m_gameType);
 
         int complexity = WordManager.Instance.Initialize(
                 this,

@@ -35,7 +35,6 @@ public class UserState : MonoBehaviour
     string WordsFileName;
     string UserSaveFileName;
     const string addr = "https://blooming-oasis-79912.herokuapp.com/";
-    //const string addr = "localhost:3000/";
 
     void Awake()
     {

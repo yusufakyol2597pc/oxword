@@ -29,13 +29,12 @@ public class CGameSingleWord : CGame
 
         int sprWordIndex = levelIndex % m_sprWordList.Length;
         int sprWordIBgndex = levelIndex % m_sprWordBgList.Length;
-        int wordIndex = levelIndex % m_levelWords.Count;
-        string word = m_levelWords[wordIndex][0];
 
         Color colorBg;
         ColorUtility.TryParseHtmlString(bgColor, out colorBg);
         m_BgImage.color = colorBg;
 
+        string word = WordPool.Instance.GetSingleWord(m_gameState.m_gameType);
 
         int complexity = WordManager.Instance.Initialize(
                 this,
@@ -43,7 +42,6 @@ public class CGameSingleWord : CGame
                 m_sprWordList[sprWordIndex],
                 m_sprWordBgList[sprWordIBgndex]
             );
-        Logger.Log(word + " " + wordIndex + " " + complexity + " " + m_gameState.m_iLevel);
         m_point = complexity * Constants.POINT_COMPLEXITY_CONSTANT;
         m_counterMaxTime = complexity * Constants.DURATION_COMPLEXITY_CONSTANT;
         m_resultText.text = m_point + " " + LanguageManager.Instance.Translate("point");

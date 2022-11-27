@@ -17939,6 +17939,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1767377407}
   m_CullTransparentMesh: 1
+--- !u!1 &1810257479
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1810257481}
+  - component: {fileID: 1810257480}
+  m_Layer: 0
+  m_Name: WordPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1810257480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1810257479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f70892429a07e18098c426221dcf243, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_taSynomymWords: {fileID: 4900000, guid: b0843bba5bbd629feb9c67d16b917daa, type: 3}
+  m_taOppositeWords: {fileID: 4900000, guid: b8542d032d04921e39bce10687817004, type: 3}
+  m_taSingleWords: {fileID: 4900000, guid: 0000d33c66541cc48b43c52b2934e10e, type: 3}
+--- !u!4 &1810257481
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1810257479}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 782.3349, y: 464.36545, z: -6.3330264}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1833223675
 GameObject:
   m_ObjectHideFlags: 0

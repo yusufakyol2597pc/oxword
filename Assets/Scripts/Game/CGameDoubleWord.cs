@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class CGameDoubleWord : CGame
 {
@@ -40,14 +41,14 @@ public class CGameDoubleWord : CGame
 
         int sprWordIndex = levelIndex % m_sprUpperLetterList.Length;
         int sprWordBgIndex = levelIndex % m_sprUpperLetterBgList.Length;
-        int wordIndex = levelIndex % m_levelWords.Count;
-        string upperWord = m_levelWords[wordIndex][0];
-        string lowerWord = m_levelWords[wordIndex][1];
+
+        Tuple<string, string> words = WordPool.Instance.GetDoubleWords(m_gameState.m_gameType);
+        Debug.Log("wordsss " + words.Item1 + "-" + words.Item2);
 
         int complexity = WordManager.Instance.Initialize(
                 this,
-                upperWord,
-                lowerWord,
+                words.Item1,
+                words.Item2,
                 m_sprUpperLetterList[sprWordIndex],
                 m_sprLowerLetterList[sprWordIndex],
                 m_sprUpperLetterBgList[sprWordBgIndex],
