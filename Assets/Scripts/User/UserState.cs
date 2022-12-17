@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using UnityEngine.Networking;
-using System;
 using System.IO;
 using Unity.Services.CloudSave;
 using System.Threading.Tasks;
@@ -46,11 +43,11 @@ public class UserState : MonoBehaviour
         httpHandler = GetComponent<HttpHandler>();
 
         WordsFileName = Application.persistentDataPath + "/SavedWords.txt";
-        UserSaveFileName = Application.persistentDataPath + "/UserSave3.txt";
+        UserSaveFileName = Application.persistentDataPath + "/UserSave8.txt";
     }
 
     // Start is called before the first frame update
-    async void Start()
+    async Task Start()
     {
         Logger.Log("Initialize", "Check if user save file exists.");
 
@@ -59,7 +56,7 @@ public class UserState : MonoBehaviour
 
         if (File.Exists(UserSaveFileName))
         {
-            ResumeGame();
+            await ResumeGame();
         }
         else
         {
@@ -67,7 +64,7 @@ public class UserState : MonoBehaviour
         }
     }
 
-    void ResumeGame()
+    async Task ResumeGame()
     {
         Logger.Log("ResumeGame", "Read user save from file.");
 
@@ -75,10 +72,12 @@ public class UserState : MonoBehaviour
         string strJson = reader.ReadToEnd();
         UserSave userSave = JsonUtility.FromJson<UserSave>(strJson);
 
+        await LoadGame();
+
         Initialize(userSave);
     }
 
-    async void NewGame()
+    void NewGame()
     {
         Logger.Log("NewGame", "Start new game with creating new save file.");
 
@@ -99,8 +98,6 @@ public class UserState : MonoBehaviour
         m_iHint = 5;
         SaveGame(true);
 
-        await SaveToCloudSynchronous();
-
         UserSave userSave = new UserSave();
         userSave.m_bSounds = m_bSounds;
         userSave.m_bVibration = m_bVibration;
@@ -110,30 +107,19 @@ public class UserState : MonoBehaviour
 
     void Initialize(UserSave userSave)
     {
-        m_lGames = new List<GameState>();
         m_bSounds = userSave.m_bSounds;
         m_bVibration = userSave.m_bVibration;
 
-        LoadArrayData<GameState>("games").ContinueWith(t => {
-            m_lGames = t.Result;
-        });
-
-        LoadIntData("coin").ContinueWith(t => {
-            m_iCoin = t.Result;
-        });
-
-        LoadIntData("hintCount").ContinueWith(t => {
-            m_iHint = t.Result;
-        });
-
-        StartCoroutine(GetWords());
+        InitMenu();
     }
 
     public void SaveGame(bool saveToCloud = true)
     {
         if (saveToCloud == true)
         {
-            StartCoroutine(SaveToCloud());
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            SaveToCloud();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
         StartCoroutine(SaveToFile());
     }
@@ -153,26 +139,21 @@ public class UserState : MonoBehaviour
         writer.Close();
     }
 
-    IEnumerator SaveToCloud()
-    {
-        Logger.Log("SaveToCloud", "Save game.");
-
-        yield return 0;
-
-        SaveData("games", m_lGames).ContinueWith((arg) => {
-        });
-        SaveData("coin", m_iCoin).ContinueWith((arg) => {
-        });
-        SaveData("hintCount", m_iHint).ContinueWith((arg) => {
-        });
-    }
-
-    async Task SaveToCloudSynchronous() {
+    async Task SaveToCloud() {
         Logger.Log("SaveToCloud", "Save game.");
 
         await SaveData("games", m_lGames);
         await SaveData("coin", m_iCoin);
         await SaveData("hintCount", m_iHint);
+    }
+
+    async Task LoadGame()
+    {
+        Logger.Log("LoadGame", "Load game.");
+
+        m_lGames = await LoadArrayData<GameState>("games");
+        m_iCoin = await LoadIntData("coin");
+        m_iHint = await LoadIntData("hintCount");
     }
 
     public async Task SaveData<T>(string key, T value)
@@ -198,6 +179,18 @@ public class UserState : MonoBehaviour
     {
         m_goGameCanvas.SetActive(false);
         menuController.InitMenu();
+    }
+
+    public void StartGame(GameType gameType)
+    {
+        foreach (GameState gameState in m_lGames)
+        {
+            if (gameState.m_gameType == gameType)
+            {
+                StartGame(gameState);
+                return;
+            }
+        }
     }
 
     public void StartGame(GameState gameState)
@@ -229,7 +222,7 @@ public class UserState : MonoBehaviour
         }
     }
 
-    public void LoadCustomLevel()
+    public void LoadCustomLevel(GameType lastGameType)
     {
         Debug.Log("start custom levellll " + m_lGames.Count);
         foreach (GameState gameState in m_lGames)
@@ -237,6 +230,7 @@ public class UserState : MonoBehaviour
             if (gameState.m_gameType == GameType.CustomLevel)
             {
                 m_customLevel.Startup(gameState);
+                m_customLevel.SetLastGameType(lastGameType);
                 break;
             }
         }
@@ -262,6 +256,7 @@ public class UserState : MonoBehaviour
 
     public void OnLevelUp(GameState gameState)
     {
+        WordPool.Instance.OnGameSucceeded();
         foreach (GameState state in m_lGames)
         {
             if (gameState == state)
@@ -280,122 +275,6 @@ public class UserState : MonoBehaviour
     public int GetHintCount()
     {
         return m_iHint;
-    }
-
-    void ReadWords()
-    {
-        Logger.Log("ReadWords", "Read words from file.");
-
-        StreamReader reader = new StreamReader(WordsFileName);
-        string strJson = reader.ReadLine();
-        ParseWords(strJson, true);
-        InitMenu();
-    }
-
-    public IEnumerator GetWords()
-    {
-        const string method = "GetWords";
-        int savedWordCount = PlayerPrefs.GetInt("SavedWordCount", 0);
-
-        UnityWebRequest www = UnityWebRequest.Get(addr + "get-word-count");
-        yield return www.SendWebRequest();
-
-        int wordCountInCloud = Int32.Parse(www.downloadHandler.text);
-        Logger.Log(method, "Word count in local: " + savedWordCount + ", word count in cloud: " + wordCountInCloud);
-
-        if (www.result != UnityWebRequest.Result.Success)
-        {
-            Logger.Log(method, www.error);
-        }
-        else if (wordCountInCloud != savedWordCount)
-        {
-            StartCoroutine(FetchWords(wordCountInCloud));
-        }
-        else if (File.Exists(WordsFileName))
-        {
-            ReadWords();
-        }
-        else
-        {
-            StartCoroutine(FetchWords(wordCountInCloud));
-        }
-    }
-
-    IEnumerator FetchWords(int wordCountInCloud)
-    {
-        const string METHOD = "FetchWords";
-        Logger.Log(METHOD, "Fetch words from mongodb.");
-
-        IWordArray wordArray = new IWordArray();
-        wordArray.words = new List<IWord>();
-        int page = 1;
-        int nWordPerPage = 0;
-        while(true)
-        {
-            UnityWebRequest www = UnityWebRequest.Get(addr + "get-words?page=" + page);
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Logger.Log(METHOD, www.error);
-            }
-            else
-            {
-                bool isFirstPage = page == 1;
-                List<IWord> gotWords = ParseWords(www.downloadHandler.text, !isFirstPage);
-                wordArray.words.AddRange(gotWords);
-
-                if (gotWords.Count == 0 || (nWordPerPage != 0 && gotWords.Count < nWordPerPage))
-                {
-                    break;
-                }
-                nWordPerPage = gotWords.Count;
-            }
-            page++;
-        }
-
-        InitMenu();
-        PlayerPrefs.SetInt("SavedWordCount", wordCountInCloud);
-        StreamWriter writer = new StreamWriter(WordsFileName, false);
-        writer.Write(JsonUtility.ToJson(wordArray));
-        writer.Flush();
-        writer.Close();
-    }
-
-    List<IWord> ParseWords(string strJson, bool append)
-    {
-        if (append == false)
-        {
-            foreach (GameState gameState in m_lGames)
-            {
-                if (gameState.m_lWords != null)
-                {
-                    gameState.m_lWords.Clear();
-                }
-            }
-        }
-
-        IWordArray wordArray = IWordArray.ParseJson(strJson);
-        foreach (IWord word in wordArray.words)
-        {
-            foreach (GameState gameState in m_lGames)
-            {
-                if (gameState.m_gameType.ToString() == word.type)
-                {
-                    List<string> words = new List<string>();
-                    foreach (string strWord in word.words)
-                    {
-                        words.Add(strWord);
-                    }
-                    if (gameState.m_lWords == null)
-                    {
-                        gameState.m_lWords = new List<List<string>>();
-                    }
-                    gameState.m_lWords.Add(words);
-                }
-            }
-        }
-        return wordArray.words;
     }
 
     public void SetSoundIsOn(bool on)

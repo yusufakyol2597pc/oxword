@@ -18,6 +18,11 @@ public class CGameCustomLevel : CGame
 
     private string BG_COLOR = "#9013FE";
 
+    public void SetLastGameType(GameType gameType)
+    {
+        m_lastGameType = gameType;
+    }
+
     public override void StartGame()
     {
         gameObject.SetActive(true);

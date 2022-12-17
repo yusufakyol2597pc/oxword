@@ -31,6 +31,8 @@ public abstract class CGame : MonoBehaviour
 
     protected static int s_iCustomLevelCounter = 0;
 
+    protected GameType m_lastGameType;
+
     public void Startup(GameState gameState)
     {
         m_levelWords = gameState.m_lWords;
@@ -61,13 +63,19 @@ public abstract class CGame : MonoBehaviour
 
     public void NextLevel()
     {
+        CloseGame();
         Logger.Log("NextLevel", "Clicked next level.");
 
-        if (s_iCustomLevelCounter >= Constants.CUSTOM_LEVEL_INTERVAL)
+        if (m_gameState.m_gameType == GameType.CustomLevel)
+        {
+            UserState.Instance.StartGame(m_lastGameType);
+            return;
+        }
+        else if (s_iCustomLevelCounter >= Constants.CUSTOM_LEVEL_INTERVAL)
         {
             s_iCustomLevelCounter = 0;
             Logger.Log("NextLevel", "Start custom level.");
-            UserState.Instance.LoadCustomLevel();
+            UserState.Instance.LoadCustomLevel(m_gameState.m_gameType);
             return;
         }
 
@@ -153,7 +161,7 @@ public abstract class CGame : MonoBehaviour
 
     IEnumerator PlaySuccessSoundInternal()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.3f);
         SoundManager.Instance.PlaySound(SoundType.GameSuccess);
     }
 
@@ -165,5 +173,10 @@ public abstract class CGame : MonoBehaviour
     public bool IsGameRunning()
     {
         return m_isRunning;
+    }
+
+    void CloseGame()
+    {
+        gameObject.SetActive(false);
     }
 }

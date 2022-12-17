@@ -1,21 +1,19 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using System.Linq;
 using Random = System.Random;
+using System.IO;
+using System.Collections;
+using Newtonsoft.Json;
 
-class WordGroup
+[Serializable]
+public class CompletedWords
 {
-    int m_letterCount;
-    List<Tuple<string, string>> m_words;
-
-    WordGroup(int letterCount, List<Tuple<string, string>> words)
-    {
-        m_letterCount = letterCount;
-        m_words = words;
-    }
+    public IDictionary<int, List<string>> m_synonymDoneWords = new Dictionary<int, List<string>>();
+    public IDictionary<int, List<string>> m_oppositeDoneWords = new Dictionary<int, List<string>>();
+    public IDictionary<int, List<string>> m_singleDoneWords = new Dictionary<int, List<string>>();
 }
 
 public class WordPool : MonoBehaviour
@@ -26,6 +24,11 @@ public class WordPool : MonoBehaviour
     [SerializeField] TextAsset m_taOppositeWords;
     [SerializeField] TextAsset m_taSingleWords;
 
+    [SerializeField] string m_strCurrentWord = "";
+
+    [SerializeField] GameType m_currentGameType;
+    [SerializeField] CompletedWords m_completedWords;
+
     IDictionary<int, List<string>> m_synonymAllWords = new Dictionary<int, List<string>>();
     IDictionary<int, List<string>> m_synonymDoneWords = new Dictionary<int, List<string>>();
 
@@ -35,12 +38,16 @@ public class WordPool : MonoBehaviour
     IDictionary<int, List<string>> m_singleAllWords = new Dictionary<int, List<string>>();
     IDictionary<int, List<string>> m_singleDoneWords = new Dictionary<int, List<string>>();
 
+    string CompletedWordsFileName = "";
+
     void Awake()
     {
         if (Instance != null)
             Destroy(Instance);
         else
             Instance = this;
+
+        CompletedWordsFileName = Application.persistentDataPath + "/CompletedWordsFileName1.txt";
     }
 
     // Start is called before the first frame update
@@ -49,6 +56,8 @@ public class WordPool : MonoBehaviour
         ReadSynonymWords();
         ReadOppositeWords();
         ReadSingleWords();
+
+        ReadCompletedWords();
     }
 
     void ReadSynonymWords()
@@ -124,40 +133,44 @@ public class WordPool : MonoBehaviour
 
     public Tuple<string, string> GetDoubleWords(GameType gameType)
     {
+        m_currentGameType = gameType;
         string strWords;
         switch (gameType)
         {
             case GameType.Synonym:
-                strWords = GetWords(m_synonymAllWords, m_synonymDoneWords);
+                strWords = GetWords(m_synonymAllWords, m_completedWords.m_synonymDoneWords);
                 break;
             case GameType.Opposite:
-                strWords = GetWords(m_oppositeAllWords, m_oppositeDoneWords);
+                strWords = GetWords(m_oppositeAllWords, m_completedWords.m_oppositeDoneWords);
                 break;
             default:
                 Logger.Log("WordPool:GetDoubleWords", "Game type not implemented");
                 strWords = "Game,Over";
                 break;
         }
+        m_strCurrentWord = strWords;
         string[] words = Regex.Split(strWords, ",");
         return new Tuple<string, string>(words[0], words[1]);
     }
 
     public string GetSingleWord(GameType gameType)
     {
+        m_currentGameType = gameType;
         string strWord;
         switch (gameType)
         {
             case GameType.SingleWord:
-                strWord = GetWords(m_singleAllWords, m_singleDoneWords);
+                strWord = GetWords(m_singleAllWords, m_completedWords.m_singleDoneWords);
                 break;
             case GameType.CustomLevel:
-                strWord = GetWords(m_singleAllWords, m_singleDoneWords);
+                strWord = GetWords(m_singleAllWords, m_completedWords.m_singleDoneWords);
                 break;
             default:
                 Logger.Log("WordPool:GetDoubleWords", "Game type not implemented");
                 strWord = "GameOver";
                 break;
         }
+        m_strCurrentWord = strWord;
         return strWord;
     }
 
@@ -176,10 +189,10 @@ public class WordPool : MonoBehaviour
                     int wordIndex = rnd.Next(0, availableWordCount);
                     return availableWords[wordIndex];
                 }
-                continue;
             }
             else
             {
+                Debug.Log(doneWords);
                 List<string> availableWords = allWords[group.Key];
                 int availableWordCount = availableWords.Count;
                 int wordIndex = rnd.Next(0, availableWordCount);
@@ -189,8 +202,62 @@ public class WordPool : MonoBehaviour
         return "Game,Over";
     }
 
-    void OnGameSucceeded(GameType gameType, string word)
+    public void OnGameSucceeded()
     {
+        switch (m_currentGameType)
+        {
+            case GameType.SingleWord:
+            case GameType.CustomLevel:
+                m_completedWords.m_singleDoneWords = SaveDoneWord(m_completedWords.m_singleDoneWords);
+                break;
+            case GameType.Synonym:
+                m_completedWords.m_synonymDoneWords = SaveDoneWord(m_completedWords.m_synonymDoneWords);
+                break;
+            case GameType.Opposite:
+                m_completedWords.m_oppositeDoneWords = SaveDoneWord(m_completedWords.m_oppositeDoneWords);
+                break;
+            default:
+                Logger.Log("WordPool:OnGameSucceeded", "Game type not implemented");
+                break;
+        }
+        StartCoroutine(SaveCompletedWords());
+    }
 
+    IDictionary<int, List<string>> SaveDoneWord(IDictionary<int, List<string>> doneWords)
+    {
+        int lenWord = m_strCurrentWord.Length;
+        if (doneWords.ContainsKey(lenWord))
+        {
+            doneWords[lenWord].Add(m_strCurrentWord);
+            return doneWords;
+        }
+        doneWords.Add(lenWord, new List<string> { m_strCurrentWord });
+        return doneWords;
+    }
+
+    void ReadCompletedWords()
+    {
+        Logger.Log("ReadCompletedWords", "Read completed words from file.");
+
+        StreamReader reader = new StreamReader(CompletedWordsFileName);
+        string strJson = reader.ReadToEnd();
+#pragma warning disable CS1701 // Assuming assembly reference matches identity
+        m_completedWords = JsonConvert.DeserializeObject<CompletedWords>(strJson);
+#pragma warning restore CS1701 // Assuming assembly reference matches identity
+    }
+
+    IEnumerator SaveCompletedWords()
+    {
+        Logger.Log("SaveCompletedWords", "SaveCompletedWords");
+        yield return 0;
+
+#pragma warning disable CS1701 // Assuming assembly reference matches identity
+        string saveJson = JsonConvert.SerializeObject(m_completedWords);
+#pragma warning restore CS1701 // Assuming assembly reference matches identity
+
+        StreamWriter writer = new StreamWriter(CompletedWordsFileName, false);
+        writer.Write(saveJson);
+        writer.Flush();
+        writer.Close();
     }
 }
